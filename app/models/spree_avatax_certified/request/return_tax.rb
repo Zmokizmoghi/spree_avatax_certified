@@ -7,7 +7,7 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
 
   def generate
     @request = {
-      DocCode: order.number.to_s + '.' + @refund.id.to_s,
+      DocCode: order.number.to_s,
       DocDate: Date.today.strftime('%F'),
       Commit: @commit,
       DocType: @doc_type ? @doc_type : 'ReturnOrder',

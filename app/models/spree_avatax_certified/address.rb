@@ -10,75 +10,42 @@ module SpreeAvataxCertified
       @order = order
       @ship_address = order.ship_address
       @origin_address = JSON.parse(Spree::Config.avatax_origin)
-      @addresses = []
+      @addresses = {}
 
       build_addresses
     end
 
     def build_addresses
       origin_address
-      order_ship_address unless @ship_address.nil?
-      origin_ship_addresses
+      order_ship_address
     end
 
     def origin_address
-      addresses << {
-        AddressCode: 'Orig',
-        Line1: @origin_address['Address1'],
-        Line2: @origin_address['Address2'],
-        City: @origin_address['City'],
-        Region: @origin_address['Region'],
-        PostalCode: @origin_address['Zip5'],
-        Country: @origin_address['Country']
+      addresses[:shipFrom] = {
+        line1: @origin_address['Address1'],
+        line2: @origin_address['Address2'],
+        city: @origin_address['City'],
+        region: @origin_address['Region'],
+        postalCode: @origin_address['Zip5'],
+        country: @origin_address['Country']
       }
     end
 
     def order_ship_address
-      addresses << {
-        AddressCode: 'Dest',
-        Line1: @ship_address.address1,
-        Line2: @ship_address.address2,
-        City: @ship_address.city,
-        Region: @ship_address.state.name,
-        Country: @ship_address.country.try(:iso),
-        PostalCode: @ship_address.zipcode
+      addresses[:shipTo] = {
+        line1: @ship_address.address1,
+        line2: @ship_address.address2,
+        city: @ship_address.city,
+        region: @ship_address.state.name,
+        country: @ship_address.country.try(:iso),
+        postalCode: @ship_address.zipcode
       }
-    end
-
-    def origin_ship_addresses
-      Spree::StockLocation.where(id: stock_loc_ids).each do |stock_location|
-        addresses << {
-          AddressCode: "#{stock_location.id}",
-          Line1: stock_location.address1,
-          Line2: stock_location.address2,
-          City: stock_location.city,
-          PostalCode: stock_location.zipcode,
-          Country: stock_location.country.try(:iso)
-        }
-      end
-    end
-
-    def validate
-      return 'Address validation disabled' unless @ship_address.validation_enabled?
-      return @ship_address if @ship_address.nil?
-
-      address_hash = {
-        Line1: @ship_address.address1,
-        Line2: @ship_address.address2,
-        City: @ship_address.city,
-        Region: @ship_address.state.try(:abbr),
-        Country: @ship_address.country.try(:iso),
-        PostalCode: @ship_address.zipcode
-      }
-
-      validation_response(address_hash)
     end
 
     private
 
     def validation_response(address)
       validator = TaxSvc.new
-      validator.validate_address(address).validation_result
     end
 
     def stock_loc_ids

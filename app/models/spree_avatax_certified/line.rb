@@ -16,23 +16,20 @@ module SpreeAvataxCertified
         refund_lines
       else
         item_lines_array
-        shipment_lines_array
       end
     end
 
     def item_line(line_item)
       {
-        LineNo: "#{line_item.id}-LI",
-        Description: line_item.name[0..255],
-        TaxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
-        ItemCode: line_item.variant.sku,
-        Qty: line_item.quantity,
-        Amount: line_item.amount.to_f,
-        OriginCode: get_stock_location(line_item),
-        DestinationCode: 'Dest',
-        CustomerUsageType: order.customer_usage_type,
-        Discounted: discounted?(line_item),
-        TaxIncluded: tax_included_in_price?(line_item)
+        number: "#{line_item.id}-LI",
+        description: line_item.name[0..255],
+        taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
+        itemCode: line_item.variant.sku,
+        quantity: line_item.quantity,
+        amount: line_item.amount.to_f,
+        addresses: nil,
+        discounted: discounted?(line_item),
+        taxIncluded: tax_included_in_price?(line_item)
       }
     end
 
@@ -40,29 +37,6 @@ module SpreeAvataxCertified
       order.line_items.each do |line_item|
         lines << item_line(line_item)
       end
-    end
-
-    def shipment_lines_array
-      order.shipments.each do |shipment|
-        next unless shipment.tax_category
-        lines << shipment_line(shipment)
-      end
-    end
-
-    def shipment_line(shipment)
-      {
-        LineNo: "#{shipment.id}-FR",
-        ItemCode: shipment.shipping_method.name,
-        Qty: 1,
-        Amount: shipment.discounted_amount.to_f,
-        OriginCode: "#{shipment.stock_location_id}",
-        DestinationCode: 'Dest',
-        CustomerUsageType: order.customer_usage_type,
-        Description: 'Shipping Charge',
-        TaxCode: shipment.shipping_method_tax_code,
-        Discounted: false,
-        TaxIncluded: tax_included_in_price?(shipment)
-      }
     end
 
     def refund_lines
@@ -84,41 +58,25 @@ module SpreeAvataxCertified
 
     def refund_line
       {
-        LineNo: "#{@refund.id}-RA",
-        ItemCode: @refund.transaction_id || 'Refund',
-        Qty: 1,
-        Amount: -@refund.amount.to_f,
-        OriginCode: 'Orig',
-        DestinationCode: 'Dest',
-        CustomerUsageType: order.customer_usage_type,
-        Description: 'Refund',
-        TaxIncluded: true
+        number: "#{@refund.id}-RA",
+        itemCode: @refund.transaction_id || 'Refund',
+        quantity: 1,
+        amount: -@refund.amount.to_f,
+        description: 'Refund',
+        taxIncluded: true,
+        addresses: nil
       }
     end
 
     def return_item_line(line_item, quantity, amount)
       {
-        LineNo: "#{line_item.id}-LI",
-        Description: line_item.name[0..255],
-        TaxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
-        ItemCode: line_item.variant.sku,
-        Qty: quantity,
-        Amount: -amount.to_f,
-        OriginCode: get_stock_location(line_item),
-        DestinationCode: 'Dest',
-        CustomerUsageType: order.customer_usage_type
+        number: "#{line_item.id}-LI",
+        description: line_item.name[0..255],
+        taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
+        itemCode: line_item.variant.sku,
+        quantity: quantity,
+        amount: -amount.to_f
       }
-    end
-
-    def get_stock_location(li)
-      inventory_units = li.inventory_units
-
-      return 'Orig' if inventory_units.blank?
-
-      # What if inventory units have different stock locations?
-      stock_loc_id = inventory_units.first.try(:shipment).try(:stock_location_id)
-
-      stock_loc_id.nil? ? 'Orig' : "#{stock_loc_id}"
     end
 
     private

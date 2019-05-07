@@ -4,16 +4,14 @@ Spree::Order.class_eval do
   self.state_machine.before_transition :to => :canceled,
                                       :do => :cancel_avalara,
                                       :if => :avalara_tax_enabled?
-  self.state_machine.before_transition :to => :delivery,
-                                      :do => :validate_ship_address,
-                                      :if => :address_validation_enabled?
+
   def avalara_tax_enabled?
     Spree::Config.avatax_tax_calculation
   end
 
   def cancel_avalara
     return nil unless avalara_transaction.present?
-    avalara_transaction.cancel_order
+    avalara_transaction.cancel_order(avalara_transaction)
   end
 
   def avalara_capture
@@ -22,14 +20,6 @@ Spree::Order.class_eval do
     create_avalara_transaction if avalara_transaction.nil?
 
     avalara_transaction.commit_avatax('SalesOrder')
-  end
-
-  def avalara_capture_finalize
-    logger.info "Start avalara_capture_finalize for order #{number}"
-
-    create_avalara_transaction if avalara_transaction.nil?
-
-    avalara_transaction.commit_avatax_final('SalesInvoice')
   end
 
   def avatax_cache_key
@@ -47,18 +37,6 @@ Spree::Order.class_eval do
     return false if ship_address.nil?
 
     ship_address.validation_enabled?
-  end
-
-  def validate_ship_address
-    avatax_address = SpreeAvataxCertified::Address.new(self)
-    response = avatax_address.validate
-
-    return response if response['ResultCode'] == 'Success'
-
-    messages = response['Messages'].each do |message|
-      errors.add(:address_validation_failure, message['Summary'])
-    end
-   return false
   end
 
   # Bringing this over since it isn't in 2.4 or 3.0

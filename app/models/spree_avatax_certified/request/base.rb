@@ -18,14 +18,9 @@ module SpreeAvataxCertified
 
       def base_tax_hash
         {
-          CustomerCode: customer_code,
-          CompanyCode: company_code,
-          CustomerUsageType: order.customer_usage_type,
-          ExemptionNo: order.user.try(:exemption_number),
-          Client:  avatax_client_version,
-          ReferenceCode: order.number,
-          DetailLevel: 'Tax',
-          CurrencyCode: order.currency
+          customerCode: customer_code,
+          companyCode: company_code,
+          email: order.email,
         }
       end
 
@@ -54,10 +49,6 @@ module SpreeAvataxCertified
 
       def customer_code
         order.user ? order.user.id : order.email
-      end
-
-      def avatax_client_version
-        AVATAX_CLIENT_VERSION || 'a0o33000004FH8l'
       end
     end
   end

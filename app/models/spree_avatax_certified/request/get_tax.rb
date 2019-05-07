@@ -1,13 +1,13 @@
 class SpreeAvataxCertified::Request::GetTax < SpreeAvataxCertified::Request::Base
   def generate
     @request = {
-      DocCode: order.number,
-      DocDate: doc_date,
-      Discount: order.all_adjustments.promotion.eligible.sum(:amount).abs.to_s,
-      Commit: @commit,
-      DocType: @doc_type ? @doc_type : 'SalesOrder',
-      Addresses: address_lines,
-      Lines: sales_lines
+      code: order.number,
+      type: @doc_type ? @doc_type : 'SalesOrder',
+      date: doc_date,
+      discount: order.all_adjustments.promotion.eligible.sum(:amount).abs.to_s,
+      commit: @commit,
+      addresses: address_lines,
+      lines: sales_lines,
     }.merge(base_tax_hash)
 
     check_vat_id

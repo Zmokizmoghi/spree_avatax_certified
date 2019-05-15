@@ -4,6 +4,7 @@ require 'addressable/uri'
 require 'base64'
 require 'rest-client'
 require 'logging'
+require 'avatax'
 
 # Avatax tax calculation API calls
 class TaxSvc

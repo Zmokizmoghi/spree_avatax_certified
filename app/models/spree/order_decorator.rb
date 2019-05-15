@@ -22,6 +22,14 @@ Spree::Order.class_eval do
     avalara_transaction.commit_avatax('SalesOrder')
   end
 
+  def avalara_capture_finalize
+    logger.info "Start avalara_capture_finalize for order #{number}"
+
+    create_avalara_transaction if avalara_transaction.nil?
+
+    avalara_transaction.commit_avatax_final('SalesInvoice')
+  end
+
   def avatax_cache_key
     key = ['Spree::Order']
     key << number

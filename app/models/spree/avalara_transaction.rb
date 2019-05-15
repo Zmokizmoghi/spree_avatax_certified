@@ -66,7 +66,7 @@ module Spree
       response = mytax.get_tax(request)
 
       return { TotalTax: '0.00' } if response.keys.include?('error')
-      { TotalTax: response['totalTax'] }
+      response
     end
 
     def post_return_to_avalara(commit = false, doc_type = nil, refund = nil)
@@ -78,7 +78,7 @@ module Spree
       response = mytax.get_tax(request)
 
       return { TotalTax: '0.00' } if response.keys.include?('error')
-      { TotalTax: response['totalTax'] }
+      response
     end
 
     def document_committing_enabled?

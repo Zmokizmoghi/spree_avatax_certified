@@ -65,7 +65,7 @@ module Spree
       mytax = TaxSvc.new
       response = mytax.get_tax(request)
 
-      return { TotalTax: '0.00' } if response.error?
+      return { TotalTax: '0.00' } if response.keys.include?('error')
       { TotalTax: response['totalTax'] }
     end
 
@@ -77,7 +77,7 @@ module Spree
       mytax = TaxSvc.new
       response = mytax.get_tax(request)
 
-      return { TotalTax: '0.00' } if response.error?
+      return { TotalTax: '0.00' } if response.keys.include?('error')
       { TotalTax: response['totalTax'] }
     end
 

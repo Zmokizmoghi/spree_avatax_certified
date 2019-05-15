@@ -40,6 +40,8 @@ class TaxSvc
       logger.error(e.message, response + ' Error')
     end
 
+    log(__method__, response)
+
     response
   end
 

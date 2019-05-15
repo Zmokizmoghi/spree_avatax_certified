@@ -21,7 +21,7 @@ module SpreeAvataxCertified
 
     def item_line(line_item)
       {
-        number: "#{line_item.id}-#{line_item.item.avatax_line_code}",
+        number: "#{line_item.id}-#{line_item.avatax_line_code}",
         description: line_item.name[0..255],
         taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
         itemCode: line_item.variant.sku,
@@ -70,7 +70,7 @@ module SpreeAvataxCertified
 
     def return_item_line(line_item, quantity, amount)
       {
-        number: "#{line_item.id}-#{line_item.item.avatax_line_code}",
+        number: "#{line_item.id}-#{line_item.avatax_line_code}",
         description: line_item.name[0..255],
         taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
         itemCode: line_item.variant.sku,

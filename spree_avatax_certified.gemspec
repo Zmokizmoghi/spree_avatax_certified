@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'addressable', '~> 2.3'
   s.add_dependency 'rest-client'
   s.add_dependency 'logging'
+  s.add_dependency 'avatax'
 
   #add gems here for files
   s.add_development_dependency 'dotenv'

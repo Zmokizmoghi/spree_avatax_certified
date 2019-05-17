@@ -25,8 +25,8 @@ module SpreeAvataxCertified
           customerCode: customer_code,
           companyCode: company_code,
           email: order.email,
-          date: doc_date
-          lines: sales_lines,
+          date: doc_date,
+          lines: sales_lines
         }
       end
 

@@ -38,7 +38,7 @@ class TaxSvc
 
     rescue => e
       Raven.capture_message("Avatax Error: Request failed with #{e.message}")
-      logger.error(e.message, response)
+      logger.error(e.message)
     end
 
     log(__method__, response)

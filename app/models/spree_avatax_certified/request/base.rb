@@ -16,11 +16,17 @@ module SpreeAvataxCertified
 
       protected
 
+      def doc_date
+        order.completed? ? order.completed_at.strftime('%F') : Date.today.strftime('%F')
+      end
+
       def base_tax_hash
         {
           customerCode: customer_code,
           companyCode: company_code,
           email: order.email,
+          date: doc_date
+          lines: sales_lines,
         }
       end
 

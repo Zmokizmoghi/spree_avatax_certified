@@ -69,6 +69,17 @@ module Spree
       response
     end
 
+    def update_order_in_avalara(commit = false, doc_type = nil)
+      logger.info "Begin update order #{order.number} to avalara"
+
+      request = SpreeAvataxCertified::Request::AddLines.new(order, commit: commit, doc_type: doc_type).generate
+
+      mytax = TaxSvc.new
+      response = mytax.update_tax(request)
+
+      response
+    end
+
     def post_return_to_avalara(commit = false, doc_type = nil, refund = nil)
       logger.info "Begin post return order #{order.number} to avalara"
 

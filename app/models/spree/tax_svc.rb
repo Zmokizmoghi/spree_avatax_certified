@@ -17,6 +17,24 @@ class TaxSvc
     handle_response(response)
   end
 
+  def update_tax(request_hash)
+    log(__method__, request_hash)
+    RestClient.log = logger.logger
+
+    response = client.add_lines(request_hash)
+
+    handle_response(response)
+  end
+
+  def get_translactions(company_code, request_hash)
+    log(__method__, request_hash)
+    RestClient.log = logger.logger
+
+    response = client.list_transactions_by_company(company_code, request_hash)
+
+    handle_response(response)
+  end
+
   def cancel_tax(request_hash, transaction)
     log(__method__, request_hash)
     RestClient.log = logger.logger

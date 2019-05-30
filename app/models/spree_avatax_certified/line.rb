@@ -16,6 +16,7 @@ module SpreeAvataxCertified
         refund_lines
       else
         item_lines_array
+        shipment_lines_array
       end
     end
 
@@ -37,6 +38,27 @@ module SpreeAvataxCertified
       order.line_items.each do |line_item|
         lines << item_line(line_item)
       end
+    end
+
+    def shipment_lines_array
+      order.shipments.each do |shipment|
+        next unless shipment.tax_category
+        lines << shipment_line(shipment)
+      end
+    end
+
+    def shipment_line(shipment)
+      {
+        number: "#{shipment.id}-FR",
+        itemCode: shipment.shipping_method.name,
+        quantity: 1,
+        amount: shipment.discounted_amount.to_f,
+        addresses: nil,
+        description: 'Shipping Charge',
+        taxCode: shipment.shipping_method_tax_code,
+        discounted: false,
+        taxIncluded: tax_included_in_price?(shipment)
+      }
     end
 
     def refund_lines

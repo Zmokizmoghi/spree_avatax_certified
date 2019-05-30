@@ -21,20 +21,15 @@ module SpreeAvataxCertified
       end
 
       def base_tax_hash
-        {
+        out = {
           customerCode: customer_code,
           companyCode: company_code,
           email: order.email,
           date: doc_date,
           lines: sales_lines
         }
-      end
 
-       # If there is a vat id, set BusinessIdentificationNo
-      def check_vat_id
-        if !business_id_no.blank?
-          @request[:BusinessIdentificationNo] = business_id_no
-        end
+        out[:businessIdentificationNo] = business_id_no if business_id_no.present?
       end
 
       def address_lines

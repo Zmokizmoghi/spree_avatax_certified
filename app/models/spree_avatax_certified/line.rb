@@ -50,7 +50,7 @@ module SpreeAvataxCertified
     def shipment_line(shipment)
       {
         number: "#{shipment.id}-FR",
-        itemCode: shipment.shipping_method.name,
+        itemCode: shipment.shipping_method.admin_name.truncate(50),
         quantity: 1,
         amount: shipment.discounted_amount.to_f,
         addresses: nil,

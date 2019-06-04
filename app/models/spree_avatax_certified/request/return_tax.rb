@@ -12,8 +12,6 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
       commit: @commit,
     }.merge(base_tax_hash)
 
-    check_vat_id
-
     @request
   end
 

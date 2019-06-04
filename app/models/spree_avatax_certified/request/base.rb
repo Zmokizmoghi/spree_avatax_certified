@@ -30,6 +30,8 @@ module SpreeAvataxCertified
         }
 
         out[:businessIdentificationNo] = business_id_no if business_id_no.present?
+
+        out
       end
 
       def address_lines

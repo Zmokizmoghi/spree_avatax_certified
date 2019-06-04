@@ -8,8 +8,6 @@ class SpreeAvataxCertified::Request::GetTax < SpreeAvataxCertified::Request::Bas
       addresses: address_lines,
     }.merge(base_tax_hash)
 
-    check_vat_id
-
     @request
   end
 

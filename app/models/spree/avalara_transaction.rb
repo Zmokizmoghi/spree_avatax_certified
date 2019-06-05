@@ -54,7 +54,7 @@ module Spree
       request = SpreeAvataxCertified::Request::CancelTax.new(order, doc_type: doc_type).generate
 
       mytax = TaxSvc.new
-      mytax.cancel_tax(request, self).tax_result
+      mytax.cancel_tax(request, self)
     end
 
     def post_order_to_avalara(commit = false, doc_type = nil)

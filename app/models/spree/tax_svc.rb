@@ -70,6 +70,10 @@ class TaxSvc
 
   private
 
+  def company_code
+    @company_code ||= Spree::Config.avatax_company_code
+  end
+
   def tax_calculation_enabled?
     Spree::Config.avatax_tax_calculation
   end

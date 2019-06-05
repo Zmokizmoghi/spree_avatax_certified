@@ -10,6 +10,7 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
       refundTransactionCode: "CR#{order.number.gsub(/[^0-9]/, '')}",
       refundDate: Date.today.strftime('%F'),
       commit: @commit,
+      addresses: address_lines
     }.merge(base_tax_hash)
 
     @request

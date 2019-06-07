@@ -11,7 +11,8 @@ class SpreeAvataxCertified::Request::AddLines < SpreeAvataxCertified::Request::B
     @request = {
       transactionCode: @transaction_id,
       lines: sales_lines,
-      companyCode: company_code
+      companyCode: company_code,
+      addresses: address_lines,
     }
     @request
   end

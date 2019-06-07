@@ -29,8 +29,6 @@ module SpreeAvataxCertified
           lines: sales_lines
         }
 
-        out[:businessIdentificationNo] = business_id_no if business_id_no.present?
-
         out
       end
 
@@ -44,10 +42,6 @@ module SpreeAvataxCertified
 
       def company_code
         @company_code ||= Spree::Config.avatax_company_code
-      end
-
-      def business_id_no
-        order.user.try(:vat_id)
       end
 
       def customer_code

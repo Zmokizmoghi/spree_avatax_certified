@@ -7,7 +7,7 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
 
   def generate
     @request = {
-      refundTransactionCode: "C#{Rails.env.production ? 'R' : 'S'}#{order.number.gsub(/[^0-9]/, '')}",
+      refundTransactionCode: "C#{Rails.env.production? ? 'R' : 'S'}#{order.number.gsub(/[^0-9]/, '')}",
       refundDate: Date.today.strftime('%F'),
       refundType: 'Partial',
       referenceCode: "Refund for a committed transaction #{order.number}",

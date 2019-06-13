@@ -8,6 +8,16 @@ require 'avatax'
 
 # Avatax tax calculation API calls
 class TaxSvc
+
+  def refund_tax(code, request_hash)
+    log(__method__, request_hash)
+    RestClient.log = logger.logger
+
+    response = client.refund_transaction(company_code, code, request_hash)
+
+    handle_response(response)
+  end
+
   def get_tax(request_hash)
     log(__method__, request_hash)
     RestClient.log = logger.logger

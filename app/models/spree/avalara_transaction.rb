@@ -86,7 +86,7 @@ module Spree
       request = SpreeAvataxCertified::Request::ReturnTax.new(order, commit: commit, doc_type: doc_type, refund: refund).generate
 
       mytax = TaxSvc.new
-      response = mytax.get_tax(request)
+      response = mytax.refund_tax(order.number, request)
 
       return { TotalTax: '0.00' } if response.keys.include?('error')
       response

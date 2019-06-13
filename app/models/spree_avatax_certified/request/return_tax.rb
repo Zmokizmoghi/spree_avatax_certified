@@ -9,8 +9,9 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
     @request = {
       refundTransactionCode: "CR#{order.number.gsub(/[^0-9]/, '')}",
       refundDate: Date.today.strftime('%F'),
-      refundType: 'Full',
-      referenceCode: "Refund for a committed transaction #{order.number}"
+      refundType: 'Partial',
+      referenceCode: "Refund for a committed transaction #{order.number}",
+      refundLines: sales_lines
     }
 
     @request

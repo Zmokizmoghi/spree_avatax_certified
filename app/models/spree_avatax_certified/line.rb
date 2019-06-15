@@ -62,7 +62,7 @@ module SpreeAvataxCertified
     end
 
     def refund_lines
-      return [nil] if @refund.reimbursement.nil?
+      return lines << refund_line if @refund.reimbursement.nil?
 
       return_items = @refund.reimbursement.customer_return.return_items
       inventory_units = Spree::InventoryUnit.where(id: return_items.pluck(:inventory_unit_id))
@@ -74,12 +74,31 @@ module SpreeAvataxCertified
         quantity = inv_unit.uniq.count
         amount = return_items.sum(:pre_tax_amount)
 
-        lines << return_item_line(inv_unit.first.line_item)
+        lines << return_item_line(inv_unit.first.line_item, quantity, amount)
       end
     end
 
-    def return_item_line(line_item)
-      "#{line_item.id}-#{line_item.avatax_line_code}"
+    def refund_line
+      {
+        number: "#{@refund.id}-RA",
+        itemCode: @refund.transaction_id || 'Refund',
+        quantity: 1,
+        amount: -@refund.amount.to_f,
+        description: 'Refund',
+        taxIncluded: true,
+        addresses: nil
+      }
+    end
+
+    def return_item_line(line_item, quantity, amount)
+      {
+        number: "#{line_item.id}-#{line_item.avatax_line_code}",
+        description: line_item.name[0..255],
+        taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
+        itemCode: line_item.variant.sku,
+        quantity: quantity,
+        amount: -amount.to_f
+      }
     end
 
     private

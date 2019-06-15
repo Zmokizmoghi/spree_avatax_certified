@@ -32,7 +32,7 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
     number = order.number.gsub(/[^0-9]/, '')
     postfix = order.refunds.count > 1 ? "-#{order.refunds.count}" : ''
 
-    ['C', suffix, numer, postfix].compact.join
+    ['C', suffix, number, postfix].compact.join
   end
 
 end

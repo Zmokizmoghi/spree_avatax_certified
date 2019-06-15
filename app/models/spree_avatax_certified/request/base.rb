@@ -26,7 +26,8 @@ module SpreeAvataxCertified
           companyCode: company_code,
           email: order.email,
           date: doc_date,
-          lines: sales_lines
+          lines: sales_lines,
+          addresses: address_lines
         }
 
         out
@@ -37,7 +38,7 @@ module SpreeAvataxCertified
       end
 
       def sales_lines
-        @sales_lines ||= SpreeAvataxCertified::Line.new(order, @doc_type).lines
+        @sales_lines ||= SpreeAvataxCertified::Line.new(order, @doc_type, @refund).lines # @refund == nil if its not refund transaction
       end
 
       def company_code

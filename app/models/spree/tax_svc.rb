@@ -13,7 +13,7 @@ class TaxSvc
     log(__method__, request_hash)
     RestClient.log = logger.logger
 
-    response = client.refund_transaction(company_code, code, request_hash)
+    response = client.create_transaction(request_hash)
 
     handle_response(response)
   end

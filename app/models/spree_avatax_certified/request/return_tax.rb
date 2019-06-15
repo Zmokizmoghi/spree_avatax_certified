@@ -7,12 +7,23 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
 
   def generate
     @request = {
-      refundTransactionCode: "C#{Rails.env.production? ? 'R' : 'S'}#{order.number.gsub(/[^0-9]/, '')}",
-      refundDate: Date.today.strftime('%F'),
-      refundType: 'Full',
-      referenceCode: "Refund for a committed transaction #{order.number}",
+      # companyCode in base hash
+      # date in base hash
+      # customerCode in base hash
+      # email in base hash
+      # lines in base hash
+      lines: sales_lines,
+      type: 'ReturnInvoice',
+      companyCode: company_code,
+      description: "Refund for a committed transaction #{order.number}",
+      code: "C#{Rails.env.production? ? 'R' : 'S'}#{order.number.gsub(/[^0-9]/, '')}",
+      commit: @commit,
+      purchaseOrderNo: order.number
+
     }
 
-    @request
+    @request.merge(base_tax_hash)
   end
+
 end
+

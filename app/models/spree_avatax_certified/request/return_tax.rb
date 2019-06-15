@@ -16,13 +16,23 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
       type: 'ReturnInvoice',
       companyCode: company_code,
       description: "Refund for a committed transaction #{order.number}",
-      code: "C#{Rails.env.production? ? 'R' : 'S'}#{order.number.gsub(/[^0-9]/, '')}",
+      code: code,
       commit: @commit,
       purchaseOrderNo: order.number
 
     }
 
     @request.merge(base_tax_hash)
+  end
+
+  private
+
+  def code
+    suffix = Rails.env.production? ? 'R' : 'S'
+    number = order.number.gsub(/[^0-9]/, '')
+    postfix = order.refunds.count > 1 ? "-#{order.refunds.count}" : ''
+
+    ['C', suffix, numer, postfix].compact.join
   end
 
 end

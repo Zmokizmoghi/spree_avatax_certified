@@ -18,7 +18,7 @@ class TaxSvc
     handle_response(response)
   end
 
-  def adjust_tax(request_hash, transaction_code)
+  def adjust_tax(transaction_code, request_hash)
     log(__method__, request_hash)
     RestClient.log = logger.logger
 

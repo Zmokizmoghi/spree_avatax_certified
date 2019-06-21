@@ -27,6 +27,10 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
 
   private
 
+  def doc_date
+    @refund.created_at.strftime('%F')
+  end
+
   def code
     suffix = Rails.env.production? ? 'R' : 'S'
     number = order.number.gsub(/[^0-9]/, '')

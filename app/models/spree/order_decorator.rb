@@ -11,7 +11,7 @@ Spree::Order.class_eval do
 
   def cancel_avalara
     return nil unless avalara_transaction.present?
-    avalara_transaction.cancel_order(avalara_transaction)
+    avalara_transaction.cancel_order
   end
 
   def avalara_capture

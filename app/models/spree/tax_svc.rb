@@ -70,9 +70,8 @@ class TaxSvc
       if response.keys.include?('error')
         Raven.capture_message("Avatax Error: Request failed with #{response}")
 
-        logger.debug(result, response['error'] + ' Response')
+        logger.debug(response)
       end
-
     rescue => e
       Raven.capture_message("Avatax Error: Request failed with #{e.message}")
       logger.error(e.message)

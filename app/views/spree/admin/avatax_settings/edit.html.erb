@@ -118,26 +118,6 @@
       </p>
 
     </fieldset>
-    <fieldset>
-    <legend><%= t('log_files') %></legend>
-    <p>Log files are located in the log directory of your spree website.</p>
-    <table>
-    <tr>
-   <td>
-    <table>
-      <tr>
-        <td>avatax.log</td>
-        <td><%= link_to("Download", { controller: :avatax_settings, action: :download_avatax_log }) %>
-        </td>
-        <td>
-          <%= link_to("Clear Data", { controller: :avatax_settings, action: :erase_data, remote: true }) %>
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
-</table>
-</fieldset>
   </div>
 </div>
 

@@ -5,7 +5,7 @@
 
 <div class="yui-g">
   <div class="yui-u first">
-    <fieldset>
+    <!-- <fieldset>
       <legend><%= t('avatax_api_login_and_key') %></legend>
       <p>
         <label><%= t('avatax_company_code') %></label><br />
@@ -20,9 +20,9 @@
         <label><%= t('avatax_license_key') %></label><br />
         <%= text_field_tag('settings[avatax_license_key]', Spree::Config.avatax_license_key, maxlength: 256, class: 'avatax') %>
       </p>
-    </fieldset>
+    </fieldset> -->
 
-    <fieldset>
+   <!--  <fieldset>
       <legend><%= t('avatax_endpoint_urls') %></legend>
       <p>
         <label><%= t('avatax_endpoint') %></label><br />
@@ -40,9 +40,9 @@
         <label><%= t('avatax_client_version') %></label><br />
         <input type="text" placeholder="<%= AVATAX_CLIENT_VERSION %>", readonly>
       </p>
-    </fieldset>
+    </fieldset> -->
 
-    <fieldset>
+   <!--  <fieldset>
       <legend><%= t('avatax_log') %></legend>
       <p>
         <label><%= t('log_to_file') %></label><br />
@@ -53,7 +53,7 @@
         <label><%= t('log_to_stdout') %></label><br />
         <%= check_box_tag('settings[avatax_log_to_stdout]', true, Spree::Config.avatax_log_to_stdout, class: 'avatax') %>
       </p>
-    </fieldset>
+    </fieldset> -->
 
     <fieldset>
       <legend><%= t('avatax_address_validation') %></legend>

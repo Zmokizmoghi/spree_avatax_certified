@@ -63,9 +63,15 @@ module Spree
       request = SpreeAvataxCertified::Request::GetTax.new(order, commit: commit, doc_type: doc_type).generate
 
       mytax = TaxSvc.new
-      response = mytax.get_tax(request)
+      begin
+        response = mytax.get_tax(request)
+      rescue => e
+        Raven.capture_message("Avatax Error: Request failed with #{e.message}",
+         user: { avatax_request: request } )
+        logger.error(e.message)
+      end
 
-      return { TotalTax: '0.00' } if response.keys.include?('error')
+      return { TotalTax: '0.00' } if !response || response.keys.include?('error')
       response
     end
 

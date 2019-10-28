@@ -17,6 +17,13 @@ Spree::Payment.class_eval do
       self.update_attributes(amount: order.total)
     end
 
-    order.avalara_capture_finalize
+    begin
+      order.avalara_capture_finalize
+    rescue => e
+      if defined?(Raven)
+        Raven.capture_message("Could not pass payment info to avalara",
+                                  user: { order_number: order.number, pamyment_number: self.number, error: e.message, backtrace: e.backtrace })
+      end
+    end
   end
 end

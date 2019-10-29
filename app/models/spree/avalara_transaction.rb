@@ -64,7 +64,7 @@ module Spree
 
       mytax = TaxSvc.new
       begin
-        response = mytax.get_tax(request)
+        response = mytax.get_tax(request, order.number)
       rescue => e
         Raven.capture_message("Avatax Error: Request failed with #{e.message}",
          user: { avatax_request: request } )

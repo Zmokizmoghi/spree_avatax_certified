@@ -27,13 +27,13 @@ class TaxSvc
     handle_response(response)
   end
 
-  def get_tax(request_hash)
+  def get_tax(request_hash, order_number = nil)
     log(__method__, request_hash)
     RestClient.log = logger.logger
 
     response = client.create_transaction(request_hash)
 
-    handle_response(response)
+    handle_response(response, order_number)
   end
 
   def update_tax(request_hash)
@@ -65,7 +65,7 @@ class TaxSvc
 
   protected
 
-  def handle_response(response)
+  def handle_response(response, order_number = nil)
     begin
       if response.keys.include?('error')
         Raven.capture_message("Avatax Error: Request failed with #{response}")
@@ -75,6 +75,9 @@ class TaxSvc
     rescue => e
       Raven.capture_message("Avatax Error: Request failed with #{e.message}",
          user: { avatax_response: response } )
+      if defined?(ErrorsNotificationsService)
+        ErrorsNotificationsService.new.call(:avatax, {order_number: order_number}) rescue nil
+      end
       logger.error(e.message)
     end
 

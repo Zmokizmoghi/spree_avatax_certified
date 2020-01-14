@@ -15,10 +15,17 @@ module Spree
 
     def commit_avatax(doc_type = nil, refund = nil)
       if tax_calculation_enabled?
-        if %w(ReturnInvoice ReturnOrder).include?(doc_type)
-          post_return_to_avalara(false, doc_type, refund)
-        else
-          post_order_to_avalara(false, doc_type)
+        begin
+          if %w(ReturnInvoice ReturnOrder).include?(doc_type)
+            post_return_to_avalara(false, doc_type, refund)
+          else
+            post_order_to_avalara(false, doc_type)
+          end
+        rescue => e
+          Raven.capture_message("Avatax Error: Request failed with #{e.message}",
+            tags: { order: order.number })
+        ensure
+          { TotalTax: '0.00' }
         end
       else
         { TotalTax: '0.00' }
@@ -67,7 +74,8 @@ module Spree
         response = mytax.get_tax(request, order.number)
       rescue => e
         Raven.capture_message("Avatax Error: Request failed with #{e.message}",
-         user: { avatax_request: request } )
+         user: { avatax_request: request },
+         tags: { order: order.number })
         logger.error(e.message)
       end
 

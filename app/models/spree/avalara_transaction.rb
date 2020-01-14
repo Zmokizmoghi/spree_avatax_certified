@@ -71,7 +71,21 @@ module Spree
         logger.error(e.message)
       end
 
-      return { TotalTax: '0.00' } if !response || response.keys.include?('error')
+      if !response
+        return { TotalTax: '0.00' }
+      elsif response.is_a?(String)
+        Raven.capture_message("Avatax Error: Api responded with #{response}",
+         user: { avatax_request: request },
+         tags: { order: order.number } )
+
+        return { TotalTax: '0.00' }
+      elsif response.keys.include?('error')
+        Raven.capture_message("Avatax Error: Api responded with #{response}",
+         user: { avatax_request: request },
+         tags: { order: order.number } )
+
+        return { TotalTax: '0.00' }
+      end
       response
     end
 
@@ -93,8 +107,21 @@ module Spree
 
       mytax = TaxSvc.new
       response = mytax.refund_tax(order.number, request)
+      if !response
+        return { TotalTax: '0.00' }
+      elsif response.is_a?(String)
+        Raven.capture_message("Avatax Error: Api responded with #{response}",
+         user: { avatax_request: request },
+         tags: { order: order.number } )
 
-      return { TotalTax: '0.00' } if response.keys.include?('error')
+        return { TotalTax: '0.00' }
+      elsif response.keys.include?('error')
+        Raven.capture_message("Avatax Error: Api responded with #{response}",
+         user: { avatax_request: request },
+         tags: { order: order.number } )
+
+        return { TotalTax: '0.00' }
+      end
       response
     end
 

@@ -17,7 +17,7 @@ module SpreeAvataxCertified
       protected
 
       def doc_date
-        order.created_at.strftime('%F')
+        order.completed_at.strftime('%F')
       end
 
       def base_tax_hash

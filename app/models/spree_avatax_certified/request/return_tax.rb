@@ -28,7 +28,11 @@ class SpreeAvataxCertified::Request::ReturnTax < SpreeAvataxCertified::Request::
   private
 
   def doc_date
-    @refund.completed_at.strftime('%F')
+    if @refund.completed_at.present?
+      @refund.completed_at
+    else
+      @refund.created_at
+    end.strftime('%F')
   end
 
   def code

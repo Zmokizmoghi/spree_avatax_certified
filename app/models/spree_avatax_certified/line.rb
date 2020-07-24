@@ -29,7 +29,7 @@ module SpreeAvataxCertified
 
 
       {
-        number: "#{li_id}-#{line_item.avatax_line_code}",
+        number: "#{li_id}-#{line_item.avatax_line_code}-#{rand(9999)}",
         description: line_item.name[0..255],
         taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
         itemCode: line_item.variant.sku,

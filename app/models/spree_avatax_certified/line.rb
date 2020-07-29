@@ -22,7 +22,7 @@ module SpreeAvataxCertified
 
     def item_line(line_item)
       {
-        number: "LI-#{line_item.quantity}-#{line_item.variant.sku}"
+        number: "LI-#{line_item.quantity}-#{line_item.variant.sku}",
         description: line_item.name[0..255],
         taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
         itemCode: line_item.variant.sku,

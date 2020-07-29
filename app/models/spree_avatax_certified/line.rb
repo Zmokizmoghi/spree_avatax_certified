@@ -21,15 +21,8 @@ module SpreeAvataxCertified
     end
 
     def item_line(line_item)
-      li_id = if line_item.id.present?
-        line_item.id
-      else
-        Time.current.to_i
-      end
-
-
       {
-        number: "#{li_id}-#{line_item.avatax_line_code}-#{rand(9999)}",
+        number: "#{line_item&.id}-#{line_item.avatax_line_code}-#{rand(99)}",
         description: line_item.name[0..255],
         taxCode: line_item.tax_category.try(:tax_code) || 'P0000000',
         itemCode: line_item.variant.sku,

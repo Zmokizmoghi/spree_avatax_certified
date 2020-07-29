@@ -88,7 +88,7 @@ module Spree
 
       if avalara_response && avalara_response['lines']
         avalara_response['lines'].each do |line|
-          if line['lineNumber'] == "#{item.id}-#{item.avatax_line_code}"
+          if line['lineNumber'] ==  "LI-#{item.quantity}-#{item.variant.sku}"
             return line['taxCalculated'].to_f
           end
         end

@@ -88,7 +88,12 @@ module Spree
 
       if avalara_response && avalara_response['lines']
         avalara_response['lines'].each do |line|
-          if line['lineNumber'] ==  "LI-#{item.quantity}-#{item.variant.sku}"
+          number = if item.is_a?(Spree::Shipment)
+            "#{item.id}-#{item.avatax_line_code}"
+          else
+            "LI-#{item.quantity}-#{item.variant.sku}"
+          end
+          if line['lineNumber'] == number
             return line['taxCalculated'].to_f
           end
         end

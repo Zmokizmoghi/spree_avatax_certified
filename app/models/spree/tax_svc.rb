@@ -31,8 +31,8 @@ class TaxSvc
     log(__method__, request_hash)
     RestClient.log = logger.logger
 
-    #response = client.create_transaction(request_hash)
-    response = client.create_or_adjust_transaction({createTransactionModel: request_hash})
+    response = client.create_transaction(request_hash)
+    #response = client.create_or_adjust_transaction({createTransactionModel: request_hash})
 
     handle_response(response, order_number)
   end

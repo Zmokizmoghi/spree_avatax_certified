@@ -91,7 +91,7 @@ module Spree
           number = if item.is_a?(Spree::Shipment)
             "#{item.id}-#{item.avatax_line_code}"
           else
-            "LI-#{item.quantity}-#{item.variant.sku}"
+            "#{item.avalara_uuid}-#{item.avatax_line_code}"
           end
           if line['lineNumber'] == number
             return line['taxCalculated'].to_f

@@ -20,7 +20,7 @@ module SpreeAvataxCertified
         if order.completed_at.present?
           order.completed_at
         else
-          order.created_at
+          Time.current
         end.strftime('%F')
       end
 

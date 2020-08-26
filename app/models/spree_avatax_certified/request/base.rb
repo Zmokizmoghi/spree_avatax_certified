@@ -50,7 +50,7 @@ module SpreeAvataxCertified
       end
 
       def customer_code
-        order.user ? order.user.id : order.email
+        [order.number, Time.current.to_i].join('-')
       end
     end
   end
